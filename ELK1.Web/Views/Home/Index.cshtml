@@ -1,0 +1,61 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ELK2-直接写日志到ES</title>
+    <link href="/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+</head>
+<body>
+    <div class="container" style="margin-top:50px;">
+        <form class="form-horizontal" role="form">
+            <div class="form-group">
+                <label for="message" class="col-sm-2 control-label">消息:</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" rows="5" id="message" name="message"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="button" data-button-val="1" class="btn btn-default btn-primary">发送消息(Trace)</button>
+                    <button type="button" data-button-val="2" class="btn btn-default btn-primary">发送消息(Debug)</button>
+                    <button type="button" data-button-val="3" class="btn btn-default btn-primary">发送消息(Info)</button>
+                    <button type="button" data-button-val="4" class="btn btn-default btn-primary">发送消息(Warn)</button>
+                    <button type="button" data-button-val="5" class="btn btn-default btn-primary">发送消息(Error)</button>
+                    <button type="button" data-button-val="6" class="btn btn-default btn-primary">发送消息(Fatal)</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        (function () {
+            $("button[data-button='sendMessage']").click(function () {
+                var type = $(this).data("button-val");
+                SendMessage(type);
+            });
+
+            function SendMessage(t) {
+                var message = $("#message").val();
+
+                if (message) {
+                    $.post("/home/Log",
+                        {
+                            message: message,
+                            type: t
+                        },
+                        function (data) {
+
+                            $("#message").val("");
+                        });
+                }
+            }
+        })();
+    </script>
+</body>
+</html>
