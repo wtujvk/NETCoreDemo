@@ -40,16 +40,13 @@ namespace CAP.Web.Controllers
         /// 发布消息。
         /// </summary>
         /// <param name="message">消息。</param>
-        /// <param name="title">标题。</param>
         /// <returns>操作的结果。</returns>
-        public ActionResult Publish(string message, string title)
+        public ActionResult Publish(string message)
         {
             AjaxDataResult<string> ajaxDataResult = AjaxDataResult<string>.GetDataResult();
             try
             {
-                title = title ?? "匿名";
-                var messageBody = new MessageBody { CreateTime = DateTime.Now, Sign = "PowerEasy.Test", Name = title, MessageContext = message };
-                _capBus.Publish(AppDataInit.MQRouteKey, messageBody);
+                _capBus.Publish(AppDataInit.MQRouteKey, message);
                 ajaxDataResult.Msg = "OK";
                 ajaxDataResult.Ok = true;
                 ajaxDataResult.Msg = message;
