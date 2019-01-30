@@ -23,7 +23,7 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button type="button" data-button="sendMessage" data-id="1" class="btn btn-default btn-primary">发送消息1</button>
+                    <button type="button" data-button="sendMessage" data-id="1" class="btn btn-default btn-primary">发送消息</button>
                 </div>
             </div>
         </form>
@@ -38,7 +38,9 @@
                 var message = $("#message").val();
                 if (message) {
                     $.post("/home/Publish",
-                        { message: message },
+                        {
+                             message: message
+                        },
                         function (data) {
                             if (data && data.ok) {
                                 $("#message").val("");
