@@ -16,7 +16,7 @@ namespace CAP.Web.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ChangeDetector.SkipDetectChanges", "true")
-                .HasAnnotation("ProductVersion", "2.1.0-rtm-30799")
+                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 #pragma warning restore 612, 618
         }

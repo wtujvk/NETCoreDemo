@@ -64,7 +64,6 @@ namespace CAP.Web
 
             app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
-            app.UseCap();
             app.UseMvc();
         }
     }
