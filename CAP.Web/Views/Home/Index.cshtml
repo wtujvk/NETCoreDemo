@@ -1,0 +1,63 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="/js/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container" style="margin-top:50px;">
+        <form class="form-horizontal" role="form">
+            <div class="form-group">
+                <label for="title" class="col-sm-2 control-label">标题</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="title" name="title" placeholder="请输入标题">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="message" class="col-sm-2 control-label">消息:</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" rows="5" id="message" name="message"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="button" data-button="sendMessage" data-id="1" class="btn btn-default btn-primary">发送消息1</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        (function () {
+            $("button[data-button='sendMessage']").click(function () {
+                var btnid = $(this).data("id");
+                SendMessage(btnid);
+            });
+
+            function SendMessage(btnid) {
+                var message = $("#message").val();
+                var title = $("#title").val();
+                var action = btnid === "1" ? "Publish" : "Publish2";
+                if (message) {
+                    $.post("/home/" + action,
+                        { message: message,title:title },
+                        function (data) {
+                            if (data && data.ok) {
+                                alert("发布消息成功。");
+                            } else {
+                                alert(data.Msg);
+                            }
+                        });
+                }
+            }
+        })();
+    </script>
+</body>
+</html>
