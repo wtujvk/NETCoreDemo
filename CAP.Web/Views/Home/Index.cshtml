@@ -31,20 +31,17 @@
     <script>
         (function () {
             $("button[data-button='sendMessage']").click(function () {
-                var btnid = $(this).data("id");
-                SendMessage(btnid);
+                SendMessage();
             });
 
-            function SendMessage(btnid) {
+            function SendMessage() {
                 var message = $("#message").val();
-                var title = $("#title").val();
-                var action = btnid === "1" ? "Publish" : "Publish2";
                 if (message) {
-                    $.post("/home/" + action,
-                        { message: message,title:title },
+                    $.post("/home/Publish",
+                        { message: message },
                         function (data) {
                             if (data && data.ok) {
-                                alert("发布消息成功。");
+                                $("#message").val("");
                             } else {
                                 alert(data.Msg);
                             }
