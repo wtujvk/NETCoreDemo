@@ -9,7 +9,8 @@ CAP原则又称CAP定理，指的是在一个分布式系统中，Consistency（
 es写日志
 3. ELK2.Web
 elk写日志
-
+4. asp.net限流框架的使用 MvcThrottleDemo
+5. webapi限流框架的使用 WebApiThrottleDemo
 参考：
 https://github.com/dotnetcore/CAP
 https://www.cnblogs.com/CoderAyu/p/9527012.html
