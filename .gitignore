@@ -1,2 +1,7 @@
 bin
 obj
+.vs
+/*.user
+MvcCorsDemo2
+App_Data
+*.user
