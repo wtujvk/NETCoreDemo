@@ -5,3 +5,5 @@ obj
 MvcCorsDemo2
 App_Data
 *.user
+ConsoleThrottleDemo
+MvcRoutedebuggerDemo

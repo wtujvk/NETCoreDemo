@@ -4,6 +4,7 @@ using WebApiCorsDemo;
 using Swashbuckle.Application;
 using System;
 using System.Xml.XPath;
+using WebApiCorsDemo.Utility;
 
 [assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 
@@ -160,6 +161,8 @@ namespace WebApiCorsDemo
                         //
                         //c.OperationFilter<AddDefaultResponse>();
                         //
+                        c.OperationFilter<HttpHeaderFilter>();
+                        c.OperationFilter<UploadFilter>();
                         // If you've defined an OAuth2 flow as described above, you could use a custom filter
                         // to inspect some attribute on each action and infer which (if any) OAuth2 scopes are required
                         // to execute the operation
@@ -262,7 +265,8 @@ namespace WebApiCorsDemo
 
         private static string GetXmlCommentsPath()
         {
-            return string.Format(@"{0}\bin\WebApiCorsDemo.xml", AppDomain.CurrentDomain.BaseDirectory);
+            //return string.Format(@"{0}\bin\WebApiCorsDemo.xml", AppDomain.CurrentDomain.BaseDirectory);
+            return string.Format(@"{0}\bin\{1}.XML", AppDomain.CurrentDomain.BaseDirectory, typeof(SwaggerConfig).Assembly.GetName().Name);
         }
     }
 }
