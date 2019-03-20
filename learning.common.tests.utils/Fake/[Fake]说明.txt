@@ -1,0 +1,4 @@
+﻿测试网站的基本对象
+
+参考链接
+http://www.cnblogs.com/cnblogsfans/archive/2009/01/05/1368630.html

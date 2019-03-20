@@ -15,3 +15,5 @@ Throttle限流框架使用
 参考：
 https://github.com/dotnetcore/CAP
 https://www.cnblogs.com/CoderAyu/p/9527012.html
+
+加入部分测试以及 efcore的内容
