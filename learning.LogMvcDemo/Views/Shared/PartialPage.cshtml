@@ -1,0 +1,12 @@
+﻿@using Webdiyer.WebControls.Mvc
+@model PagedList<IEntity>
+<div class="pagin">
+    <div class="message">共<i class="blue">@Model.TotalItemCount</i>条记录，当前显示第&nbsp;<i class="blue">@Model.CurrentPageIndex&nbsp;</i>页</div>
+    @*<ul class="paginList">*@
+    @Ajax.Pager(Model, new PagerOptions { PageIndexParameterName = "pageIndex", ShowPageIndexBox = false, ShowGoButton = false,
+        AutoHide = false, ContainerTagName = "ul", CssClass = "paginList",  
+        CurrentPagerItemWrapperFormatString = "<li class=\"paginItem current \"><a href=\"avascript:;\">{0}</a></li>",
+        ShowFirstLast=false, PagerItemWrapperFormatString = "<li class=\"paginItem \">{0}</li>",
+        NextPageText = "<span class=\"pagenxt\"></span>", PrevPageText = "<span class=\"pagepre\"></span>" },
+        new MvcAjaxOptions { UpdateTargetId = "ListContent", HttpMethod = "Post", DataFormId = "searchForm" })
+</div>

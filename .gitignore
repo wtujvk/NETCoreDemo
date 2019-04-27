@@ -7,3 +7,5 @@ App_Data
 *.user
 ConsoleThrottleDemo
 MvcRoutedebuggerDemo
+/packages
+/MvcThrottleDemo/MvcThrottleDemo.csproj.user
