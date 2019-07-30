@@ -1,0 +1,106 @@
+﻿@using WebuploaderUtils.Common
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "首页";
+}
+
+@section css{
+
+    <style>
+        #form li.file-item {
+            float: left;
+            border: 1px solid #ddd;
+            padding: 10px 12px 10px 8px;
+        }
+
+        .f-sp-name {
+            width: 200px;
+            overflow: hidden;
+            float: right;
+            display: inline-block;
+            white-space: nowrap;
+            -ms-text-overflow: ellipsis;
+            text-overflow: ellipsis;
+            -o-text-overflow: ellipsis;
+            overflow: hidden;
+        }
+    </style>
+}
+<div>
+    <a class="btn btn-default btn-primary" href="/Home/Index2">百度编辑器2</a>
+    <a class="btn btn-default btn-primary" href="/Home/Index">非百度编辑器</a>
+</div>
+<blockquote>
+    <p>带文本框的上传 </p>
+    @Html.WebUploader("files", new WebUploader { AcceptExtensions = "zip,rar,png,jpg", UploadFileType = UploadFileType.File, FileNumLimit = 1, ButtonText = "提交附件", InputModel = true, Duplicate = true, Style = "width:293px", TableStyle = "margin-top: -4px;" })
+    <div>
+        <code>[InputModel = true]</code><br />
+        <code>[duplicate = true] :是否可以重复上传</code>
+    </div>
+</blockquote>
+
+
+<blockquote>
+    <p>带按钮的上传 </p>
+    @Html.WebUploader("files-2", new WebUploader { AcceptExtensions = "zip,rar,png,jpg", UploadFileType = UploadFileType.File, FileNumLimit = 10, ButtonText = "提交附件", Style = "width:293px", TableStyle = "margin-top: -4px;" })
+    <div><code>[InputModel = false]</code></div>
+</blockquote>
+
+<blockquote id="form">
+    <p>图片+标题 上传 </p>
+    @Html.WebUploader("files-3", new WebUploader { AcceptExtensions = "png,jpg", UploadFileType = UploadFileType.Image, FileNumLimit = 10, ButtonText = "选择图片", Style = "width:293px", TableStyle = "margin-top: -4px;", ImgList = "img_list" })
+    <p>图片 上传 </p>
+    @Html.WebUploader("files-5", new WebUploader { AcceptExtensions = "png,jpg", UploadFileType = UploadFileType.Image, FileNumLimit = 10, ButtonText = "选择图片", Style = "width:293px", TableStyle = "margin-top: -4px;" })
+    <div id="imageArea"></div>
+</blockquote>
+
+<blockquote>
+    <p>My97DatePicker 时间 </p>
+    @Html.Calendar("time")
+</blockquote>
+
+<blockquote>
+    <p>ckeditor编辑器(项目里使用ckfinder 需配置 /Assets/ckfinder/config.ascx权限。)</p>
+    @Html.RichTextEditor("CKEDITOR1", new RichTextEditor { Height = 300, ToolBar = RichTextEditorToolBar.Full, Plugins = RichTextEditorPlugins.CKEDITOR, Width = 900 })
+</blockquote>
+
+<blockquote>
+    <p>百度编辑器</p>
+    @Html.RichTextEditor("UMEDITOR1", new RichTextEditor() { Height = 300, ToolBar = RichTextEditorToolBar.Full, Plugins = RichTextEditorPlugins.UEDITOR, Width = 900, Cnt="" })
+</blockquote>
+<a id="js-submit" href="JavaScript:;" class="btn btn-primary">测试</a>
+
+<script type="text/javascript">
+    $(function () {
+        /* 得到 图片+标题 的json 数据*/
+        $("#js-submit").click(function () {
+            var imgIntroList = [];
+            $(".file-item").each(function (k, v) {
+                imgIntroList.push({ "title": $(v).find(".form-control").val(), "url": $(v).data("file") });
+            });
+
+            console.log(JSON.stringify(imgIntroList));
+            var tempHtml = "";
+            if (imgIntroList.length > 0) {
+                for (var i = 0; i < imgIntroList.length; i++) {
+                    tempHtml += "<img src="+imgIntroList[i].url+" >";
+                }
+            }
+
+            $("#imageArea").empty();
+            $("#imageArea").append(tempHtml);
+        });
+    })
+
+</script>
+
+@*
+    提示。还有种用法
+
+     @Html.WebUploaderFor(m=>m.Files, new WebUploader { accept_extensions = "zip,rar,png,jpg", UploadFileType = UploadfilesHelper.UploadFileType.File, fileNumLimit = 1, ButtonText = "提交附件", InputModel = true, duplicate = true, style = "width:293px", table_style = "margin-top: -4px;" })
+
+    @Html.CalendarFor(m=>m.Time,new{ @class="form-control"})
+
+    有问题请联系 vanteking@163.com  Tevin Wang
+
+*@

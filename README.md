@@ -17,3 +17,7 @@ https://github.com/dotnetcore/CAP
 https://www.cnblogs.com/CoderAyu/p/9527012.html
 
 加入部分测试以及 efcore的内容
+
+2019.7.30
+6. TesseractOcrDemo 非常初级的验证码识别。使用了Tesseract.Net.SDK， 验证码使用自己生成的数字验证码（没有做复杂的处理）
+7. WebuploaderMvcDemo 封装的webupload上传插件。使用的Asp.Net Mvc， 前端使用的Jquery, ueditor富文本编辑器等。

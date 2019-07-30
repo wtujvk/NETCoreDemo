@@ -1,0 +1,22 @@
+﻿@using WebuploaderUtils.Common
+@model WebuploaderUtils.Common.RichTextEditor
+@{
+    //dom id
+    string name = (ViewData["RichTextEditorName"] ?? string.Empty).ToString();
+    int idhash = Model.GetHashCode();
+}
+
+<!-- 加载编辑器的容器 -->
+<script id="editor_@idhash" name="@name" type="text/plain" style="@($"width:{Model.Width.ToNoMin(600)}px;height:{Model.Height.ToNoMin(300)}px;{(Model.AutoHeight?"height:auto":"")}")">
+    @Html.Raw(Model.Cnt)
+</script>
+<!-- 配置文件 -->
+<script src="~/Assets/ueditor/ueditor.config.js"></script>
+<!-- 编辑器源码文件 -->
+<script src="~/Assets/ueditor/ueditor.all.min.js"></script>
+<!-- 实例化编辑器 -->
+<script type="text/javascript">
+    var ueid = 'editor_@idhash';
+    var ue = UE.getEditor(ueid);
+
+</script>

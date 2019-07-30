@@ -1,0 +1,20 @@
+﻿ @using WebuploaderUtils.Common @using WebuploaderUtils.Extensions @model DateTime?
+@{
+    var datetimeString = Model == null ? string.Empty : ViewBag.IsYearMonth == null ? Model.Value.String() : Model.Value.YearMonth();
+    if ((ViewData.ContainsKey("IsReadOnly") && (bool)ViewData["IsReadOnly"]) || (Html.IsReadonly()))
+    {
+    @datetimeString
+    @Html.Hidden("", datetimeString)
+    }
+    else
+    {
+        string name = (ViewData["DateTimeName"] ?? string.Empty).ToString();
+        var format = ViewBag.DateFormat == null ? "yyyy-MM-dd" : (string)ViewBag.DateFormat;
+
+        if (ViewContext.NotLoad("DateTimePicker"))
+        {    
+    @Url.My97DatePickerJs()    
+        }
+    @Html.TextBox(name, datetimeString, new { @class = "Wdate", onclick = "WdatePicker({dateFmt: '" + format + "'})", @readonly = "readonly" })
+    }
+}

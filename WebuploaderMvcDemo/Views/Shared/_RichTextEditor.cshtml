@@ -1,0 +1,142 @@
+﻿@using WebuploaderUtils.Common
+@model WebuploaderUtils.Common.RichTextEditor
+@{
+    //各编辑器的语言
+    string[] CKLang = new string[] { "zh-cn", "zh", "en" };
+    string[] UELang = new string[] { "zh-cn", "en" };
+    string[] KindLang = new string[] { "zh_CN", "zh_TW", "en", "ko", "ar" };
+
+    //各编辑器的皮肤
+    string[] CKSkin = new string[] { "office2013", "kama", "moono" };
+    string[] UESkin = new string[] { "default" };
+    string[] KindSkin = new string[] { "default", "common", "qq", "simple" };
+
+    System.Text.StringBuilder _sb = new System.Text.StringBuilder();
+
+    //dom id
+    string name = (ViewData["RichTextEditorName"] ?? string.Empty).ToString();
+
+}
+@Html.TextArea(name, Model.Cnt)
+@switch (Model.Plugins)
+{
+    case RichTextEditorPlugins.CKEDITOR:
+        if (ViewContext.NotLoad("RichTextEditor"))
+        {
+            @Url.AssetsJs("ckeditor/ckeditor.js", "ckfinder/ckfinder.js")
+            @Url.Js("webuploader/js/webuploader.min.js?v=2016")
+        }
+        _sb.Append("<script type=\"text/javascript\">/*$(function(){*/");
+        _sb.Append("var options_" + name + "={");
+        _sb.Append("language:'" + CKLang[0] + "',");
+        if (Model.ToolBar == RichTextEditorToolBar.Base)
+        {
+            _sb.Append("toolbar:[['Bold','Italic','CustomStyle', 'Paragraph', 'FontFamily', 'FontSize','-','Undo','Redo','-','Image','Link', 'Unlink', 'Anchor','Image']],");
+        }
+        else if (Model.ToolBar == RichTextEditorToolBar.BaseSource)
+        {
+            _sb.Append("toolbar:[['Source','-','Bold','Italic','CustomStyle', 'Paragraph', 'FontFamily', 'FontSize','-','Undo','Redo','-','Image','Link', 'Unlink', 'Anchor','Image']],");
+        }
+        if (Model.Width > 50 && Model.Height > 10)
+        {
+            _sb.Append("width:" + Model.Width + ",");
+            _sb.Append("height:" + Model.Height + ",");
+        }
+       // _sb.Append("_parse_word_url:'{0}',".FormatWith(Url.Action(MVC.EWebSysAdmin.Word.ParseWord())));
+       // _sb.Append("_assets_base_path:'{0}',".FormatWith(Url.Action(MVC.Default.Index(), "http")));
+        _sb.Append("skin:'" + CKSkin[0] + "'");
+        _sb.Append("};");
+        _sb.Append("var editor=CKEDITOR.replace('" + name + "',options_" + name + ");");
+        _sb.Append("/*});*/</script>");
+        break;
+    case RichTextEditorPlugins.KINDEDITOR:
+        if (ViewContext.NotLoad("RichTextEditor"))
+        {
+            @Url.AssetsJs("kindeditor/kindeditor-all-min.js", "kindeditor/lang/" + KindLang[0] + ".js")
+        }
+        _sb.Append("<script type=\"text/javascript\">/*$(function(){*/");
+        _sb.Append("var editor_" + name + ";");
+        _sb.Append("var options_" + name + "={");
+        if (Model.Width > 50 && Model.Height > 10)
+        {
+            _sb.Append("width:'{0}px',".FormatWith(Model.Width));
+            _sb.Append("height:'{0}px',".FormatWith(Model.Height));
+        }
+        if (Model.ToolBar == RichTextEditorToolBar.Base)
+        {
+            _sb.Append("items:['bold','italic','customstyle', 'paragraph', 'fontfamily', 'fontsize', '|','undo','redo', '|','image','link', 'unlink', 'anchor', 'image'],");
+        }
+        else if (Model.ToolBar == RichTextEditorToolBar.BaseSource)
+        {
+            _sb.Append("items:['source', '|','bold','italic','customstyle', 'paragraph', 'fontfamily', 'fontsize', '|','undo','redo', '|','image','link', 'unlink', 'anchor', 'image'],");
+        }
+        _sb.Append("themeType:'{0}',".FormatWith(KindSkin[0]));
+        _sb.Append("filterMode:false,");
+        _sb.Append("langType:'{0}',".FormatWith(KindLang[0]));
+        _sb.Append("cssPath:'{0}'".FormatWith(Url.Content("~/Assets/css/bootstrap3/css/bootstrap.min.css?v=" + DateTime.Now.ToString("yyyyMMdd"))));
+        _sb.Append("};");
+        _sb.Append("options_{0}.uploadJson='{1}';".FormatWith(name, Url.Content("~/assets/kindeditor/asp.net/upload_json.ashx")));
+        _sb.Append("options_{0}.fileManagerJson='{1}';".FormatWith(name, Url.Content("~/assets/kindeditor/asp.net/file_manager_json.ashx")));
+        _sb.Append("KindEditor.ready(function (K) {{editor_{0}=K.create('#{0}',options_{0});}});".FormatWith(name));
+        _sb.Append("/*});*/</script>");
+        break;
+    case RichTextEditorPlugins.UEDITOR:
+        if (ViewContext.NotLoad("RichTextEditor"))
+        {
+            @Url.AssetsJs("ueditor/ueditor.config.js", "ueditor/ueditor.all.min.js", "ueditor/dialogs/kityformula-plugin/addKityFormulaDialog.js", "ueditor/dialogs/kityformula-plugin/getKfContent.js", "ueditor/dialogs/kityformula-plugin/defaultFilterFix.js", "ueditor/dialogs/ParseWord/addParseWordDialog.js")
+        }
+        _sb.Append("<script type=\"text/javascript\">$(function(){");
+        _sb.Append("var options_{0}={{".FormatWith(name));
+        if (Model.Width > 50 && Model.Height > 10)
+        {
+            _sb.Append("initialFrameWidth:{0},".FormatWith(Model.Width));
+            _sb.Append("initialFrameHeight:{0},".FormatWith(Model.Height));
+        }
+        if (Model.ToolBar == RichTextEditorToolBar.Base)
+        {
+            _sb.Append("toolbars:[['bold','italic','customstyle', 'paragraph', 'fontfamily', 'fontsize','undo','redo','image','link', 'unlink', 'anchor','insertimage']],");
+        }
+        else if (Model.ToolBar == RichTextEditorToolBar.BaseSource)
+        {
+            _sb.Append("toolbars:[['source','bold','customstyle', 'paragraph', 'fontfamily', 'fontsize','italic','undo','redo','image','link', 'unlink', 'anchor','insertimage']],");
+        }
+        _sb.Append("autoHeightEnabled:{0},".FormatWith(Model.AutoHeight.ToString().ToLower()));
+        _sb.Append("lang:'{0}',".FormatWith(UELang[0]));
+       // _sb.Append("_parse_word_url:'{0}',".FormatWith(Url.Action(MVC.EWebSysAdmin.Word.ParseWord())));
+        _sb.Append("focus:false");
+        _sb.Append("};");
+        _sb.Append(" var editor_{0} = UE.getEditor('{0}',options_{0});".FormatWith(name));
+        _sb.Append("});</script>");
+        break;
+    default:
+    case RichTextEditorPlugins.UMEDITOR:
+        if (ViewContext.NotLoad("RichTextEditor"))
+        {
+            @Url.AssetsCss("umeditor/themes/default/css/umeditor.min.css")
+            @Url.AssetsJs("umeditor/umeditor.config.js", "umeditor/umeditor.min.js")
+        }
+        _sb.Append("<script type=\"text/javascript\">$(function(){");
+        _sb.Append("var options_{0}={{".FormatWith(name));
+        if (Model.Width > 50 && Model.Height > 10)
+        {
+            _sb.Append("initialFrameWidth:{0},".FormatWith(Model.Width));
+            _sb.Append("initialFrameHeight:{0},".FormatWith(Model.Height));
+        }
+        if (Model.ToolBar == RichTextEditorToolBar.Base)
+        {
+            _sb.Append("toolbar:['bold italic | customstyle paragraph | fontfamily fontsize | undo redo | link unlink anchor'],");
+        }
+        else if (Model.ToolBar == RichTextEditorToolBar.BaseSource)
+        {
+            _sb.Append("toolbar:['source | bold italic | customstyle paragraph | fontfamily fontsize | undo redo | link unlink anchor'],");
+        }
+        _sb.Append("autoHeightEnabled:{0},".FormatWith(Model.AutoHeight.ToString().ToLower()));
+        _sb.Append("lang:/^zh/.test(navigator.language || navigator.browserLanguage || navigator.userLanguage) ? 'zh-cn' : 'en',");
+        _sb.Append("textarea:'{0}',".FormatWith(name));
+        _sb.Append("focus:true");
+        _sb.Append("};");
+        _sb.Append(" var editor_{0} = UM.getEditor('{0}',options_{0});".FormatWith(name));
+        _sb.Append("});</script>");
+        break;
+}
+@Html.Raw(_sb.ToString())

@@ -1,0 +1,37 @@
+﻿@using WebuploaderUtils.Common
+
+@{
+    ViewBag.Title = "Index2";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section css{
+
+    <style>
+        #form li.file-item {
+            float: left;
+            border: 1px solid #ddd;
+            padding: 10px 12px 10px 8px;
+        }
+
+        .f-sp-name {
+            width: 200px;
+            overflow: hidden;
+            float: right;
+            display: inline-block;
+            white-space: nowrap;
+            -ms-text-overflow: ellipsis;
+            text-overflow: ellipsis;
+            -o-text-overflow: ellipsis;
+            overflow: hidden;
+        }
+    </style>
+}
+<div>
+    <a class="btn btn-default btn-primary" href="/Home/Index2">百度编辑器2</a>
+    <a class="btn btn-default btn-primary" href="/Home/Index">非百度编辑器</a>
+</div>
+<blockquote>
+    <p>百度编辑器 </p>
+    @Html.RichTextEditor("UMEDITOR1", new RichTextEditor { Height = 300, ToolBar = RichTextEditorToolBar.Full, Plugins = RichTextEditorPlugins.UEDITOR, Width = 900 })
+</blockquote>

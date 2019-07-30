@@ -1,0 +1,283 @@
+﻿@using WebuploaderUtils
+@using WebuploaderUtils.Common
+@model WebuploaderUtils.Common.WebUploader
+@{
+    string name = (ViewData["FileUploaderName"] ?? string.Empty).ToString();
+    int _name_hash = Math.Abs(name.GetHashCode());
+    if (string.IsNullOrEmpty(name) == true) { name = "file"; }
+    int _file_version = 20151207;
+}
+@if (Model.UploadFileType == UploadFileType.Image)
+{
+    <style type="text/css">
+        .f-icon, .f-sp-name, .file-item .error > .msg
+        {
+            /* display: none !important;*/
+        }
+
+        .file-item .js-remove-file-fex
+        {
+            z-index: 101;
+        }
+
+        .file-item .info
+        {
+            display: none;
+        }
+
+        #banner .webuploader-pick
+        {
+            border-radius: 4px;
+        }
+    </style>
+}
+else
+{
+    <style type="text/css">
+        img.f-icon
+        {
+            display: inline-block;
+        }
+
+        li.thumbnail
+        {
+            border: none;
+        }
+
+        .file-item .info
+        {
+            display: none;
+        }
+        /*   .file-item .info, .f-thum-img
+        {
+            display: none !important;
+        }
+         */
+        .file-item .js-remove-file-fex
+        {
+            z-index: 101;
+        }
+
+        .f-sp-name
+        {
+            margin-right: 35px;
+            z-index: 100;
+        }
+
+        li.file-item
+        {
+            float: none;
+        }
+
+        .file-item > div.error
+        {
+            position: static;
+        }
+
+        .file-item .error > .msg
+        {
+            display: block;
+        }
+
+        .f-upload-table
+        {
+            margin-top: 15px;
+        }
+
+        #banner .webuploader-pick
+        {
+            border-radius: 4px;
+        }
+    </style>
+}
+<table class="f-upload-table" style="@Model.TableStyle">
+    <tbody>
+        @if ((ViewData.ContainsKey("IsReadOnly") && (bool)ViewData["IsReadOnly"]) || (Html.IsReadonly()))
+        {
+            var files = string.IsNullOrEmpty(Model.Files) ? new List<string>() : (Model.Files.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList());
+            <tr>
+                <td>
+                    @if (files.Count == 0)
+                    {
+                        <span class="f-null">无文件</span>
+                    }
+                    else
+                    {
+                        <ul class="list-unstyled f-file-list">
+                            @foreach (var item in files)
+                            {
+                                <li>@Html.FileIcon(item, true, true)
+                                </li>
+                            }
+                        </ul>
+                    }
+                    @Html.Hidden(name, Model.Files)
+                </td>
+            </tr>
+        }
+        else
+        {
+            <tr class="@(Model.InputModel == true ? "hide" : string.Empty)">
+                <td>
+                    <ul class="list-unstyled uploader-list">
+                        @if (string.IsNullOrEmpty(Model.Files) == false)
+                        {
+                            if (string.IsNullOrEmpty(Model.ImgList))
+                            {
+                                foreach (var item in Model.Files.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                                {
+                                    if (System.IO.File.Exists(Server.MapPath("~" + item)) == true)
+                                    {
+                                  
+                            <li id="file-@item.GetHashCode()" data-file="@item" class="file-item thumbnail">
+                                <div class="js-remove-file-fex" data-hide="@name"></div>
+                                @Html.FileIcon(item, true, false)
+                                <div class="info">
+                                    @item.Substring(item.LastIndexOf("/") + 1)
+                                </div>
+                            </li>
+                                    }
+                                }
+                            }
+                            else //图片or 文件 +描述
+                            {
+                                List<Jsonlist> list = new List<Jsonlist>();
+                                list = JsonHelper.DeserializeObject<List<Jsonlist>>(Model.Files);
+                                foreach (var item in list)
+                                {
+                                  
+                            <li id="file-@item.Url.GetHashCode()" data-file="@item.Url" class="file-item thumbnail" style="border:none;">
+                                <div class="pull-left">
+                                    @Html.FileIcon(item.Url, true, false)
+
+                                </div>
+                                <div class="pull-right" style="margin-left: 10px;">
+                                    <div>
+                                        <span >名称：&nbsp;@(item.Url.ToString().Substring(item.Url.LastIndexOf("/")).Replace("/", ""))</span>
+                                        <div class="js-remove-file-fex-list" data-hide="@name"></div>
+                                    </div>
+                                    <div style="padding-top: 8px;">
+                                        <textarea class="form-control" style="width: 310px; margin-top: 0px; margin-bottom: 0px; height: 73px; resize: none;" placeholder="请简短的填写一下描述">@item.Title</textarea>
+                                    </div>
+                                </div>
+
+                            </li>
+                                    
+                                }
+                            }
+                        }
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="btns">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        @Html.Hidden("js-file-obj-" + name)
+                                        @if (Model.InputModel == false)
+                                        {
+                                            @Html.Hidden(name, Model.Files)
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBox(name, Model.Files, new { @class = "form-control txt-file-input", style = "display:inline;border-radius:0;" + Model.Style + "" })
+                                        }
+                                    </td>
+                                    <td  class="td-picker">
+                                        <div id="picker@(_name_hash)" style="@Model.Color">@Html.Raw(Model.ButtonText)</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    @if (ViewContext.NotLoad("WebUploader"))
+                    {
+                        @Url.ScriptCss("webuploader/css/demo.css?v=" + _file_version, "webuploader/css/webuploader.css?v=" + _file_version)
+                        @Url.Js("webuploader/js/webuploader.min.js?v=" + _file_version, "webuploader/js/handler.js?v=" + _file_version)
+                        var _script_del_url = new System.Text.StringBuilder();
+                        _script_del_url.Append("<script type=\"text/javascript\">");
+                        _script_del_url.Append("var _del_file_server = \"{0}\";".FormatWith(Url.Action("DeleteFile", "Server", new { cid = Request.QueryString["cid"] })));
+                        _script_del_url.Append("</script>");
+                        @Html.Raw(_script_del_url)
+                    }
+
+                    @{
+                    var _script = new System.Text.StringBuilder();
+                    _script.Append("<script type=\"text/javascript\">");
+                    _script.Append("$(function(){");
+                    _script.Append("if(WebUploader.Uploader.support()===false){");
+                    _script.Append("alert('上传组件不支持您的浏览器！如果你使用的是IE浏览器，请尝试升级 flash 播放器');");
+                    _script.Append("throw new Error('WebUploader does not support the browser you are using.');");
+                    _script.Append("}");
+                    _script.Append("var uploader{0}=WebUploader.create({{".FormatWith(_name_hash));/*文件上传*/
+                    _script.Append("domId:'{0}',".FormatWith(Model.DomId ?? string.Empty));
+                    _script.Append("auto:{0},".FormatWith(Model.auto.ToString().ToLower()));
+                    _script.Append("swf:'{0}',".FormatWith(Url.Content("~/assets/js/webuploader/flash/Uploader.swf")));
+                    _script.Append("server:'{0}',".FormatWith(Model.server ?? @Url.Action("FileUpload", "Server", new { cid = Request.QueryString["cid"] })));
+                    _script.Append("formData:{");
+                    _script.Append("fileType:{0},".FormatWith((int)Model.UploadFileType));
+                    _script.Append("pathFormat:'{0}',".FormatWith(Model.PathFormat));
+                    _script.Append("sizeLimit:{0}".FormatWith(Model.FileSingleSizeLimit));
+                    _script.Append("},");
+                    _script.Append("pick:'#picker{0}',".FormatWith(_name_hash));
+                    _script.Append("fileNumLimit:{0},".FormatWith(Model.InputModel == true ? 1 : Model.FileNumLimit));
+                    _script.Append("duplicate:{0},".FormatWith(Model.Duplicate.ToString().ToLower()));
+                    _script.Append("fileSizeLimit:{0},".FormatWith(Model.FileSizeLimit));
+                    _script.Append("fileSingleSizeLimit:{0},".FormatWith(Model.FileSingleSizeLimit));
+
+                    _script.Append("accept:{");
+                    _script.Append("title:'{0}',".FormatWith(Model.AcceptTitle));
+                    _script.Append("extensions:'{0}',".FormatWith(Model.AcceptExtensions));
+                    _script.Append("mimeTypes:'{0}',".FormatWith(Model.AcceptMimeTypes));
+                    _script.Append("_InputModel:{0}".FormatWith(Model.InputModel.ToString().ToLower()));
+                    _script.Append("}");
+
+                    _script.Append("});");
+
+                    _script.Append("WebUploaderBind(uploader{0},'{1}',{2},{3},'{4}');".FormatWith(_name_hash, name, Model.ThumbnailWidth, Model.ThumbnailHeight, Model.ImgList));
+                    _script.Append("});");
+                    _script.Append("</script>");
+                        @Html.Raw(_script)
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<!--
+<script type="text/javascript">
+    //上传完成组件的数量(用来计算多少个组件上传完成)
+    var _upload_total = 0;
+    //使用的上传组件数量
+    var _new_total = 0;
+    //定时器
+    var _Interval;
+
+    $(function () {
+        //点击提交,触发上传事件,完成后提交表单
+        $('#js-btn-submit').on('click', function () {
+            _upload_total = 0;
+            //上传组件的 dom id
+            var _dom_id = 'TResultAudio,TResultVideo';
+            //过滤(有多个上传组件时使用,否则可以注释)
+            var _new_uploader_list = [];
+            for (var i = 0; i < _web_uploader_list.length; i++) {
+                if (_dom_id.indexOf(_web_uploader_list[i].options.domId) > -1) { _new_uploader_list.push(_web_uploader_list[i]); }
+            }
+            _new_total = _new_uploader_list.length;
+            //完成事件
+            for (var i = 0; i < _new_uploader_list.length; i++) {
+                _new_uploader_list[i].on('uploadFinished', function (file) { _upload_total = _upload_total + 1; }).upload();
+            }
+            //定时器检测
+            _Interval = setInterval(function () {
+                if (_upload_total === _new_total) { $('#js-form').submit(); clearInterval(_Interval); }
+            }, 700);
+            return false;
+        });
+    });
+</script>
+-->
