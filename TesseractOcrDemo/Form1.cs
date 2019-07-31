@@ -101,5 +101,55 @@ namespace TesseractOcrDemo
             this.txtTestResult.AppendText(result);
             this.txtTestResult.ScrollToCaret();
         }
+
+        private void BtnLocalYzm_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Title = "请选择要上传的图片", Filter = "图像文件(*.jpg;*.gif;*.png)|*.jpg;*.gif;*.png", Multiselect = false
+            };
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                var path = openFileDialog.FileName;
+                this.txtImgPath.Text = path;
+                this.pictureBox1.Load(path);
+            }
+        }
+
+        private void BtnImageCreate_Click(object sender, EventArgs e)
+        {
+            var input = this.txtInput.Text.Trim();
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                MessageBox.Show("请输入内容");
+            }
+            else
+            {
+                inputText = input.Trim();
+                var image = Utils.CreateCaptchaSimpleImage(input.Trim());
+                this.pictureBox2.Image?.Dispose();
+                this.pictureBox2.Image = image;
+            }
+        }
+
+        private void BtnSeeInput_Click(object sender, EventArgs e)
+        {
+            if (this.pictureBox2.Image != null)
+            {
+                using (var bitmap = new Bitmap(this.pictureBox2.Image))
+                {
+                    var text = new RecognizeLogic().GetStringFromImage(bitmap);
+                    var result =
+                        string.Equals(inputText?.Trim(), text?.Trim(), StringComparison.InvariantCultureIgnoreCase)
+                            ? "成功"
+                            : "失败";
+                    var message = $"输入：{inputText}，识别：{text}。 识别{result}\r\n";
+                    this.txtInputResult.AppendText(message);
+                    this.txtInputResult.ScrollToCaret();
+                }
+            }
+        }
+
+        private string inputText;
     }
 }
