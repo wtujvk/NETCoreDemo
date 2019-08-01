@@ -24,14 +24,14 @@ namespace TesseractOcrDemo.Codes
         public static Bitmap CreateCaptchaSimpleImage(string validateCode)
         {
             var code = GetNewString(validateCode);
-            Bitmap bitmap = new Bitmap((int)Math.Ceiling(code.Length * 16.0), 27);
+            Bitmap bitmap = new Bitmap((int)Math.Ceiling((code.Length*2) * 35.0), 35);
             using (Graphics g = Graphics.FromImage(bitmap))
             {
-                var font = new Font(FontFamily.GenericMonospace, 13);
-                var brush = new LinearGradientBrush(new Rectangle(0, 0, bitmap.Width, bitmap.Height), Color.Blue,
+                var font = new Font(FontFamily.GenericMonospace, 20);
+                var brush = new LinearGradientBrush(new Rectangle(0, 0, bitmap.Width, bitmap.Height), Color.Black,
                     Color.DarkRed, 1.2f, true);
               
-                g.DrawString(code, font, brush, 3, 2);
+                g.DrawString(code, font, brush, 5, 2);
                
                 return bitmap;
             }
@@ -91,7 +91,7 @@ namespace TesseractOcrDemo.Codes
         private static string GetNewString(string code)
         {
             var array = code.ToCharArray();
-            var newString = string.Join("  ", array);
+            var newString = string.Join(" ", array);
             return newString;
         }
     }

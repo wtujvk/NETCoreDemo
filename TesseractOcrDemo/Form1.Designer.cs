@@ -78,7 +78,7 @@
             // 
             this.pictureBox1.Location = new System.Drawing.Point(24, 185);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(118, 54);
+            this.pictureBox1.Size = new System.Drawing.Size(179, 54);
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
             // 
@@ -88,7 +88,7 @@
             this.btnKnowYzm.Name = "btnKnowYzm";
             this.btnKnowYzm.Size = new System.Drawing.Size(103, 36);
             this.btnKnowYzm.TabIndex = 2;
-            this.btnKnowYzm.Text = "识别普通验证码";
+            this.btnKnowYzm.Text = "识别验证码";
             this.btnKnowYzm.UseVisualStyleBackColor = true;
             this.btnKnowYzm.Click += new System.EventHandler(this.BtnKnowYzm_Click);
             // 
@@ -331,7 +331,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox3);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "验证码识别0.0";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
