@@ -24,15 +24,15 @@ namespace TesseractOcrDemo.Codes
         public static Bitmap CreateCaptchaSimpleImage(string validateCode)
         {
             var code = GetNewString(validateCode);
-            Bitmap bitmap = new Bitmap((int)Math.Ceiling((code.Length*2) * 35.0), 35);
+            Bitmap bitmap = new Bitmap((int)Math.Ceiling(code.Length * 70.0), 35);
             using (Graphics g = Graphics.FromImage(bitmap))
             {
                 var font = new Font(FontFamily.GenericMonospace, 20);
                 var brush = new LinearGradientBrush(new Rectangle(0, 0, bitmap.Width, bitmap.Height), Color.Black,
                     Color.DarkRed, 1.2f, true);
-              
+
                 g.DrawString(code, font, brush, 5, 2);
-               
+
                 return bitmap;
             }
         }

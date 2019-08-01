@@ -44,20 +44,23 @@ namespace TesseractOcrDemo.Codes
                     for (int i = 0; i < count; i++)
                     {
                         var numberChar = Utils.GetRandString(verificationCodeCategory);
-                        var bitmap = Utils.CreateCaptchaSimpleImage(numberChar);
-                        var text = ocrApi.GetTextFromImage(bitmap);
-                        var resultSuccess = string.Equals(numberChar?.Trim(), text?.Trim(),
-                            StringComparison.CurrentCultureIgnoreCase);
-                          var resultMessage = resultSuccess ? "识别成功"
-                            : "识别失败";
-                          if (resultSuccess)
-                          {
-                              successCount++;
-                          }
+                        using (var bitmap = Utils.CreateCaptchaSimpleImage(numberChar))
+                        {
+                            var text = ocrApi.GetTextFromImage(bitmap);
+                            var resultSuccess = string.Equals(numberChar?.Trim(), text?.Trim(),
+                                StringComparison.CurrentCultureIgnoreCase);
+                            var resultMessage = resultSuccess
+                                ? "识别成功"
+                                : "识别失败";
+                            if (resultSuccess)
+                            {
+                                successCount++;
+                            }
 
-                        var message = $"{i+1}, 随机数是{numberChar},验证码识别是{text},结果：{resultMessage}。 \r\n";
-                        action?.Invoke(message);
-                        bitmap.Dispose();
+                            var message = $"{i + 1}, 随机数是{numberChar},验证码识别是{text},结果：{resultMessage}。 \r\n";
+                            action?.Invoke(message);
+                            bitmap.Dispose();
+                        }
                     }
                 }
             }

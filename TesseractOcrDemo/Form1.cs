@@ -24,6 +24,7 @@ namespace TesseractOcrDemo
         {
             var ranNum = Utils.GetRandString(VerificationCodeCategory.Number);
             var image = Utils.CreateCaptchaSimpleImage(ranNum);
+            this.pictureBox1.Image?.Dispose();
             this.pictureBox1.Image = image;
         }
 
@@ -34,7 +35,7 @@ namespace TesseractOcrDemo
                 var bitmap = new Bitmap(this.pictureBox1.Image);
                 var text = new RecognizeLogic().GetStringFromImage(bitmap);
                 this.txtResult.Text = text;
-                //bitmap.Dispose();
+                bitmap.Dispose();
             }
             else
             {
@@ -46,6 +47,7 @@ namespace TesseractOcrDemo
         {
             var ranNum = Utils.GetRandString(VerificationCodeCategory.Number | VerificationCodeCategory.Lowercase);
             var image = Utils.CreateCaptchaSimpleImage(ranNum);
+            this.pictureBox1.Image?.Dispose();
             this.pictureBox1.Image = image;
         }
 
